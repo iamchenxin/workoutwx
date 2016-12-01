@@ -1,10 +1,10 @@
 // @flow
-// Its quite different from typescript, i thought something in d.ts is typo.
-// So i retyped this from source-code of koa2.
+// Its a bit different from Typescript, i thought something in d.ts is typo.
 // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/types-2.0/koa/index.d.ts#L158
+// So i retyped this from source-code of koa2.
 // import type { Server } from 'http'; //Currently, import type doesnt work well?
 declare module 'koa' {
-  // copy from flow/lib/node.js#L820
+  // Copy from flow/lib/node.js#L820
   declare class Server extends net$Server {
     listen(port: number, hostname?: string, backlog?: number, callback?: Function): Server,
     listen(path: string, callback?: Function): Server,
@@ -19,10 +19,15 @@ declare module 'koa' {
   declare type JSONObject = { [key: string]: JSON };
   declare type JSONArray = Array<JSON>;
 
+  declare type SimpleHeader = {
+    'set-cookie': Array<string>|void,
+    [key: string]: string|void,
+  };
+
   declare type RequestJSON = {
-    'method': mixed,
-    'url': mixed,
-    'header': mixed,
+    'method': string,
+    'url': string,
+    'header': Object,
   };
   declare type RequestInspect = void|RequestJSON;
   declare type Request = {
