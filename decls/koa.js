@@ -54,19 +54,19 @@ declare module 'koa' {
     query: {[key: string]: mixed},
     querystring: string,
     search: string,
-    secure: boolean,
+    secure: boolean,// Shorthand for ctx.protocol == "https" to check if a request was issued via TLS.
     socket: net$Socket,
     stale: boolean,
     subdomains: string[],
     type: string,
     url: string,
 
-    charset: string,
+    charset: string|void,
     length: number|void,
 
 //  Those functions comes from https://github.com/jshttp/accepts/blob/master/index.js
 //  request.js$L445
-//  But where is the void come from ????
+//  ToDO: RP https://github.com/koajs/koa/pull/863
 //  Seems from the unit test, it returns a string[]string|false, without `void`
 //  https://github.com/jshttp/accepts/blob/master/test/type.js
     accepts: ( () => string[] )& // return the old value.
@@ -76,20 +76,20 @@ declare module 'koa' {
 //  https://github.com/jshttp/accepts/blob/master/index.js#L153
 //  https://github.com/jshttp/accepts/blob/master/test/charset.js
     acceptsCharsets: ( () => string[] )&
-    ( (arg: string[]) => void|string|false)&
-    ( (...args: string[]) => void|string|false ),
+    ( (arg: string[]) => string|false)&
+    ( (...args: string[]) => string|false ),
 
 //  https://github.com/jshttp/accepts/blob/master/index.js#L119
 //  https://github.com/jshttp/accepts/blob/master/test/encoding.js
     acceptsEncodings: ( () => string[] )&
-    ( (arg: string[]) => void|string|false)&
-    ( (...args: string[]) => void|string|false ),
+    ( (arg: string[]) => string|false)&
+    ( (...args: string[]) => string|false ),
 
 //  https://github.com/jshttp/accepts/blob/master/index.js#L185
 //  https://github.com/jshttp/accepts/blob/master/test/language.js
     acceptsLanguages: ( () => string[] )&
-    ( (arg: string[]) => void|string|false)&
-    ( (...args: string[]) => void|string|false ),
+    ( (arg: string[]) => string|false)&
+    ( (...args: string[]) => string|false ),
 
     get: (field: string) => string,
 
@@ -126,7 +126,8 @@ declare module 'koa' {
     ctx: Context,
     request: Request,
 
-    body: mixed, // response#L125 getter {String|Buffer|Object|Stream}
+    // docs/api/response.md#L113.
+    body: string|Buffer|stream$Stream|JSON|null, // JSON contains null
     etag: string,
     header: {[key: string]: mixed},
     headers: {[key: string]: mixed}, // alias as header
@@ -173,34 +174,53 @@ declare module 'koa' {
     res: '<original node res>',
     socket: '<original node socket>',
   };
+  // https://github.com/pillarjs/cookies
+  declare type CookiesSetOptions = {
+    maxAge: number, // milliseconds from Date.now() for expiry
+    expires: Date, //cookie's expiration date (expires at the end of session by default).
+    path: string, //  the path of the cookie (/ by default).
+    domain: string, // domain of the cookie (no default).
+    secure: boolean, // false by default for HTTP, true by default for HTTPS
+    httpOnly: boolean, //  a boolean indicating whether the cookie is only to be sent over HTTP(S),
+    // and not made available to client JavaScript (true by default).
+    signed: boolean, // whether the cookie is to be signed (false by default)
+    overwrite: boolean, //  whether to overwrite previously set cookies of the same name (false by default).
+  };
+  declare type Cookies = {
+    get: (name: string, options: {signed: boolean}) => string|void,
+    set: ((name: string, value: string, options?: CookiesSetOptions) => Context)&
+    // delete cookie (an outbound header with an expired date is used.)
+    ( (name: string) => Context),
+  };
   // The default props of context come from two files
   // `application.createContext` & `context.js`
   declare type Context = {
     accept: $PropertyType<Request, 'accept'>,
     app: Application,
-    cookies: Object, // https://github.com/pillarjs/cookies
+    cookies: Cookies,
     name?: string, // ?
     originalUrl: string,
     req: http$IncomingMessage,
     request: Request,
     res: http$ServerResponse,
-    respond?: boolean, // allow bypassing koa application.js#L193
+    respond?: boolean, // should not be used, allow bypassing koa application.js#L193
     response: Response,
     state: Object,
 
     // context.js#L55
-    assert: (test: mixed, status: number, message: string, opts: mixed) => void,
+    assert: (test: mixed, status: number, message?: string, opts?: mixed) => void,
     // context.js#L107
     // if (!(err instanceof Error)) err = new Error(`non-error thrown: ${err}`);
     onerror: (err?: mixed) => void,
     // context.js#L70
-    throw: ( arg1: string|number|Error, arg2: string|number|Error,
-      opts: Object) => void,
+    throw: (( statusOrErr: string|number|Error, errOrStatus?: string|number|Error,
+      opts?: Object) => void) &
+      (( statusOrErr: string|number|Error, opts?: Object) => void),
     toJSON(): ContextJSON,
     inspect(): ContextJSON,
 
     // ToDo: add const for some props,
-    // while the `const props` feature is landing in future
+    // while the `const props` feature of Flow is landing in future
     // cherry pick from response
     attachment: $PropertyType<Response, 'attachment'>,
     redirect: $PropertyType<Response, 'redirect'>,
@@ -260,11 +280,16 @@ declare module 'koa' {
   };
   declare class Application extends events$EventEmitter {
     context: Context,
+    // request handler for node's native http server.
+    callback: (req: http$IncomingMessage, res: http$ServerResponse) => void,
     env: string,
+    keys?: Array<string>|Object, // https://github.com/crypto-utils/keygrip
     middleware: Array<Function>,
-    proxy: boolean,
+    name?: string, // optionally give your application a name
+    proxy: boolean, // when true proxy header fields will be trusted
     request: Request,
     response: Response,
+    server: Server,
     subdomainOffset: number,
 
     listen: $PropertyType<Server, 'listen'>,
