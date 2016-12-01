@@ -1,7 +1,20 @@
 // @flow
-// import type { Server } from 'http';
+// Its quite different from typescript, i thought something in d.ts is typo.
+// So i retyped this from source-code of koa2.
 // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/types-2.0/koa/index.d.ts#L158
+// import type { Server } from 'http'; //Currently, import type doesnt work well?
 declare module 'koa' {
+  // copy from flow/lib/node.js#L820
+  declare class Server extends net$Server {
+    listen(port: number, hostname?: string, backlog?: number, callback?: Function): Server,
+    listen(path: string, callback?: Function): Server,
+    listen(handle: Object, callback?: Function): Server,
+    close(callback?: Function): Server,
+    maxHeadersCount: number,
+    setTimeout(msecs: number, callback: Function): Server,
+    timeout: number,
+  }
+
   declare type JSON = | string | number | boolean | null | JSONObject | JSONArray;
   declare type JSONObject = { [key: string]: JSON };
   declare type JSONArray = Array<JSON>;
@@ -49,7 +62,7 @@ declare module 'koa' {
 //  Those functions comes from https://github.com/jshttp/accepts/blob/master/index.js
 //  request.js$L445
 //  But where is the void come from ????
-//  Seems from the unit test , should be like :
+//  Seems from the unit test, it returns a string[]string|false, without `void`
 //  https://github.com/jshttp/accepts/blob/master/test/type.js
     accepts: ( () => string[] )& // return the old value.
     ((arg: string[]) => void|string|false)&
@@ -75,15 +88,13 @@ declare module 'koa' {
 
     get: (field: string) => string,
 
-/*
+/* https://github.com/jshttp/type-is/blob/master/test/test.js
 * Check if the incoming request contains the "Content-Type"
 * header field, and it contains any of the give mime `type`s.
 * If there is no request body, `null` is returned.
 * If there is no content type, `false` is returned.
 * Otherwise, it returns the first `type` that matches.
 */
-//
-// https://github.com/jshttp/type-is/blob/master/test/test.js
     is: ( () => string )& // should return the mime type
     ( (arg: string[]) => null|false|string)&
     ( (...args: string[]) => null|false|string ),
@@ -103,7 +114,6 @@ declare module 'koa' {
     'header': mixed,
     'body': mixed,
   };
-
   declare type Response = {
     app: Application,
     req: http$IncomingMessage,
@@ -117,7 +127,7 @@ declare module 'koa' {
     headers: {[key: string]: mixed}, // alias as header
     headerSent: boolean,
     // can be set with string|Date, but get with Date.
-  //  set lastModified(v: string|Date), // 0.36 do not support this.
+    // set lastModified(v: string|Date), // 0.36 doesn't support this.
     lastModified: Date,
     message: string,
     socket: net$Socket,
@@ -125,7 +135,7 @@ declare module 'koa' {
     type: string,
     writable: boolean,
 
-//    charset: string,  // do not find in response.js
+    // charset: string,  // doesn't find in response.js
     length: number|void,
 
     append: (field: string, val: string | string[]) => void,
@@ -159,7 +169,7 @@ declare module 'koa' {
     socket: '<original node socket>',
   };
   // The default props of context come from two files
-  // application.createContext & context.js
+  // `application.createContext` & `context.js`
   declare type Context = {
     app: Application,
     req: http$IncomingMessage,
@@ -167,7 +177,7 @@ declare module 'koa' {
     request: Request,
     response: Response,
     originalUrl: string,
-    cookies: any, // https://github.com/pillarjs/cookies
+    cookies: Object, // https://github.com/pillarjs/cookies
     accept: $PropertyType<Request, 'accept'>,
     state: Object,
     name?: string, // ?
@@ -184,6 +194,8 @@ declare module 'koa' {
     toJSON(): ContextJSON,
     inspect(): ContextJSON,
 
+    // ToDo: add const for some props,
+    // while the `const props` feature is landing in future
     // cherry pick from response
     attachment: $PropertyType<Response, 'attachment'>,
     redirect: $PropertyType<Response, 'redirect'>,
@@ -234,10 +246,8 @@ declare module 'koa' {
     [key: string]: mixed;
   }
 
-
   declare type middlewareCallBack =
     (ctx: Context, next: Promise<Function>) => Promise<void>|void;
-
   declare type ApplicationJSON = {
     'subdomainOffset': mixed,
     'proxy': mixed,
@@ -252,22 +262,10 @@ declare module 'koa' {
     request: Request,
     response: Response,
 
-    // should be Server, not sure how to import type
     listen: $PropertyType<Server, 'listen'>,
     toJSON(): ApplicationJSON,
     inspect(): ApplicationJSON,
     use(fn: middlewareCallBack): this,
-  }
-
-// copy from flow/lib/node.js#L820
-  declare class Server extends net$Server {
-    listen(port: number, hostname?: string, backlog?: number, callback?: Function): Server,
-    listen(path: string, callback?: Function): Server,
-    listen(handle: Object, callback?: Function): Server,
-    close(callback?: Function): Server,
-    maxHeadersCount: number,
-    setTimeout(msecs: number, callback: Function): Server,
-    timeout: number,
   }
 
   declare module.exports: Class<Application>;
