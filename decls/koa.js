@@ -176,17 +176,17 @@ declare module 'koa' {
   // The default props of context come from two files
   // `application.createContext` & `context.js`
   declare type Context = {
-    app: Application,
-    req: http$IncomingMessage,
-    res: http$ServerResponse,
-    request: Request,
-    response: Response,
-    originalUrl: string,
-    cookies: Object, // https://github.com/pillarjs/cookies
     accept: $PropertyType<Request, 'accept'>,
-    state: Object,
+    app: Application,
+    cookies: Object, // https://github.com/pillarjs/cookies
     name?: string, // ?
+    originalUrl: string,
+    req: http$IncomingMessage,
+    request: Request,
+    res: http$ServerResponse,
     respond?: boolean, // allow bypassing koa application.js#L193
+    response: Response,
+    state: Object,
 
     // context.js#L55
     assert: (test: mixed, status: number, message: string, opts: mixed) => void,
@@ -259,13 +259,13 @@ declare module 'koa' {
     'env': string,
   };
   declare class Application extends events$EventEmitter {
-    proxy: boolean,
-    middleware: Array<Function>,
-    subdomainOffset: number,
-    env: string,
     context: Context,
+    env: string,
+    middleware: Array<Function>,
+    proxy: boolean,
     request: Request,
     response: Response,
+    subdomainOffset: number,
 
     listen: $PropertyType<Server, 'listen'>,
     toJSON(): ApplicationJSON,
