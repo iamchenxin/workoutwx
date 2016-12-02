@@ -20,8 +20,8 @@ declare module 'koa' {
   declare type JSONArray = Array<JSON>;
 
   declare type SimpleHeader = {
-    'set-cookie': Array<string>|void,
-    [key: string]: string|void,
+    'set-cookie'?: Array<string>,
+    [key: string]: string,
   };
 
   declare type RequestJSON = {
@@ -38,8 +38,8 @@ declare module 'koa' {
     response: Response,
 
     fresh: boolean,
-    header: {[key: string]: mixed},
-    headers: {[key: string]: mixed}, // alias as header
+    header: SimpleHeader,
+    headers: SimpleHeader, // alias as header
     host: string,
     hostname: string,
     href: string,
@@ -54,7 +54,7 @@ declare module 'koa' {
     query: {[key: string]: mixed},
     querystring: string,
     search: string,
-    secure: boolean,// Shorthand for ctx.protocol == "https" to check if a request was issued via TLS.
+    secure: boolean, // Shorthand for ctx.protocol == "https" to check if a request was issued via TLS.
     socket: net$Socket,
     stale: boolean,
     subdomains: string[],
@@ -127,7 +127,7 @@ declare module 'koa' {
     request: Request,
 
     // docs/api/response.md#L113.
-    body: string|Buffer|stream$Stream|JSON|null, // JSON contains null
+    body: string|Buffer|stream$Stream|Object|null, // JSON contains null
     etag: string,
     header: {[key: string]: mixed},
     headers: {[key: string]: mixed}, // alias as header

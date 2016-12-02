@@ -2,10 +2,14 @@
 const koa = require('koa');
 const route = require('koa-route');
 const app = new koa();
-const util = require('util');
+//const util = require('util');
+const fs = require('./utils/fs.js').fs;
+import { toTmpDir, format } from './utils/tools.js';
 import type { Context } from 'koa';
+fs.setEncoding('utf8');
 
-app.use(route.get('/hi', async (ctx:Context, next) => {
+
+app.use(route.get('/hi', async (ctx: Context, next) => {
   ctx.ts = 1;
 //  ctx.ts = '1';
 
@@ -16,11 +20,17 @@ app.use(route.get('/hi', async (ctx:Context, next) => {
   ctx.body += '<br/>iam hiend </div>';
   //const a:number = ctx.ts;
 }));
-app.use(route.get('/',async (ctx, next) => {
-
-  ctx.body = 'iam root!';
-  await next();
-  ctx.body += '<br/>rootend! ';
+app.use(route.get('/', async (ctx: Context, next) => {
+  const content = `
+  ${format(ctx.headers)}
+  \n
+  ${format(ctx.query)}`;
+  ctx.body = content;
+  fs.writeFile(toTmpDir('wxyz'), content);
+}));
+app.use(route.get('/wxyz', async (ctx: Context, next) => {
+  const str = await fs.readFile(toTmpDir('wxyz'));
+  ctx.body = str;
 }));
 
 app.use( route.get('/hd', async(ctx: Context, next) => {
@@ -36,8 +46,8 @@ app.use( route.post('/hd2', async(ctx: Context, next) => {
   ctx.body = ctx.header;
 }));
 
-app.use( route.get('/th', async(ctx: Context, next) =>{
-  ctx.throw(400, 400,{aa:'aaa'});
+app.use( route.get('/th', async(ctx: Context, next) => {
+  ctx.throw(400, 400, {aa:'aaa'});
 }));
 
 app.listen('19001');
