@@ -11,7 +11,9 @@
     "start": "node ./lib/index.js",
     "dev": "gulp build && npm run start",
     "schema": "node ./lib/updateSchema.js",
-    "bnode": "NODE_ENV=dev babel-node"
+    "bnode": "NODE_ENV=dev babel-node",
+    "cr": "NODE_ENV=dev babel-node src/utils/mcrypto.js",
+    "ws": "NODE_ENV=dev babel-node src/ts/wx.js"
   },
   "dependencies": {
     "colors": "^1.1.2",

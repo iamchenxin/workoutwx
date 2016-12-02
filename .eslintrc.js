@@ -43,6 +43,7 @@ module.exports = {
         WARNING,
         "^([A-Z][a-z0-9]+)+"
     ],
+    "flowtype/object-type-delimiter": "semicolon",
   },
   "settings": {
     "flowtype": {
