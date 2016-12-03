@@ -22,6 +22,10 @@ router
   .get('/hi', hi);
 
 app.use(bodyParser())
+.use(async (ctx: Context, next: () => Promise<void>) => {
+  fs.writeFile(toTmpDir('allb'), format(ctx.request.body));
+  await next();
+})
 .use(router.routes());
 
 

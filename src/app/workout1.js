@@ -32,6 +32,9 @@ ${format(plainWx)}
 -------------------
 query:
 ${format(ctx.query)}
+--------------------
+headers:
+${format(ctx.header)}
     `
   }
   fs.writeFile(toTmpDir('wxbody'), str);
