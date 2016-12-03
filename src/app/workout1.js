@@ -21,10 +21,14 @@ plainWx:
 ${format(plainWx)}
     `;
   } else {
+    const plainWx = wc.decryptMsg(ctx.query, ctx.request.body);
     str = `
 something wrong.
 wxBody:
 ${format(ctx.request.body)}
+-------------------
+plainWx:
+${format(plainWx)}
     `
   }
   fs.writeFile(toTmpDir('wxbody'), str);
