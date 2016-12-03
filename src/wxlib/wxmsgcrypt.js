@@ -36,7 +36,7 @@ class WXBizMsgCrypt {
     return plainMsg.message; // the message is deciphered echostr.
   }
 
-  decryptMsg( wxParams: WXParams, wxPost: mixed) {
+  decryptMsg( wxParams: WXParams, wxPost: Buffer) {
 
   }
 }

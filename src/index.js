@@ -21,9 +21,21 @@ router
   .get('/log', logDisplay)
   .get('/hi', hi);
 
-app.use(bodyParser())
-.use(async (ctx: Context, next: () => Promise<void>) => {
-  fs.writeFile(toTmpDir('allb'), format(ctx.request.body));
+
+//app.use(bodyParser())
+app.use(async (ctx: Context, next: () => Promise<void>) => {
+  const str = `
+something wrong.
+wxBody:
+${format(ctx.request.body)}
+-------------------
+query:
+${format(ctx.query)}
+--------------------
+headers:
+${format(ctx.header)}
+  `;
+  fs.writeFile(toTmpDir('allb'), str);
   await next();
 })
 .use(router.routes());
