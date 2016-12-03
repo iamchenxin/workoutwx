@@ -29,6 +29,9 @@ ${format(ctx.request.body)}
 -------------------
 plainWx:
 ${format(plainWx)}
+-------------------
+query:
+${format(ctx.query)}
     `
   }
   fs.writeFile(toTmpDir('wxbody'), str);
