@@ -1,53 +1,28 @@
 // @flow
 const koa = require('koa');
-const route = require('koa-route');
+const router = require('koa-router')();
 const app = new koa();
 //const util = require('util');
 const fs = require('./utils/fs.js').fs;
 import { toTmpDir, format } from './utils/tools.js';
 import type { Context } from 'koa';
-fs.setEncoding('utf8');
+import { wxverify } from './app/wxverify.js';
+import { workout1 } from './app/workout1.js';
+import { logDisplay } from './app/log.js';
+const bodyParser = require('koa-bodyparser');
 
+async function hi(ctx: Context, next) {
+  ctx.body = 'hi!';
+}
 
-app.use(route.get('/hi', async (ctx: Context, next) => {
-  ctx.ts = 1;
-//  ctx.ts = '1';
+router
+  .get('/work1', wxverify)
+  .post('/work1', workout1)
+  .get('/log', logDisplay)
+  .get('/hi', hi);
 
-  ctx.body = 'hi<br/> <div>';
-  await next();
-  console.log(typeof ctx.body);
-  if ( typeof ctx.body != 'string') {throw 'e';}
-  ctx.body += '<br/>iam hiend </div>';
-  //const a:number = ctx.ts;
-}));
-app.use(route.get('/', async (ctx: Context, next) => {
-  const content = `
-  ${format(ctx.headers)}
-  \n
-  ${format(ctx.query)}`;
-  ctx.body = content;
-  fs.writeFile(toTmpDir('wxyz'), content);
-}));
-app.use(route.get('/wxyz', async (ctx: Context, next) => {
-  const str = await fs.readFile(toTmpDir('wxyz'));
-  ctx.body = str;
-}));
+app.use(bodyParser())
+.use(router.routes());
 
-app.use( route.get('/hd', async(ctx: Context, next) => {
-  console.log(typeof ctx.header);
-  console.log(ctx.header);
-  ctx.cookies.set('hello', 'iam cookies');
-  ctx.body = ctx.header;
-}));
-
-app.use( route.post('/hd2', async(ctx: Context, next) => {
-  console.log(typeof ctx.header);
-  console.log(ctx.header);
-  ctx.body = ctx.header;
-}));
-
-app.use( route.get('/th', async(ctx: Context, next) => {
-  ctx.throw(400, 400, {aa:'aaa'});
-}));
 
 app.listen('19001');

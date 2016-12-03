@@ -2,3 +2,5 @@ node_modules
 string_v
 .vscode
 tpjest
+tmpdir
+priv

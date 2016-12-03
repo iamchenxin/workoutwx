@@ -19,6 +19,14 @@ function format(v: mixed): string {
   return util.inspect(v, {depth: null});
 }
 
+// pretty format, for console display
+function pFormat(v: mixed): string {
+  return util.inspect(v, {
+    depth: null,
+    colors: true,
+  });
+}
+
 function formatProp(v: mixed): string {
   if ( typeof v === 'object' && v != null) {
     const ob = v;
@@ -42,6 +50,7 @@ const toTmpDir = makerResolveToPath(base.paths.tmpdir);
 module.exports = {
   JSONstring,
   format,
+  pFormat,
   formatProp,
   makerResolveToPath,
   toTmpDir,

@@ -17,3 +17,19 @@ export class SpawnError extends Error {
 
 export class RepoFileError extends Error {
 }
+
+export class WXCrypToError extends Error {
+  code: ?string;
+  constructor(msg: string, code?: string) {
+    super(msg);
+    this.code = code?code:'error';
+  }
+}
+
+export class WXXmlError extends Error {
+  code: ?string;
+  constructor(msg: string, code?: string) {
+    super(msg);
+    this.code = code?code:'error';
+  }
+}
