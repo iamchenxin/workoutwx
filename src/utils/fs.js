@@ -15,9 +15,9 @@ class FS {
   readFile: ( file: string|Buffer|number, option?: Object|string )
     => Promise<string|Buffer>;
   writeFile: ( file: string|Buffer|number, data: string|Buffer,
-    option?: Object|string ) => Promise<string|Buffer>;
+    option?: Object|string ) => Promise<void>;
   _writeFile: ( file: string|Buffer|number, data: string|Buffer,
-    option?: Object|string ) => Promise<string|Buffer>;
+    option?: Object|string ) => Promise<void>;
   constructor(u_ori_fs: typeof node_fs, encode?: string) {
     const ori_fs = mustNot(null, u_ori_fs, 'invalid fs');
     this.encode = encode ? encode : 'utf8';
@@ -47,7 +47,7 @@ class FS {
   }
 
   writeFile( file: string|Buffer|number, data: string|Buffer,
-  _option?: Object|string ): Promise<string|Buffer> {
+  _option?: Object|string ): Promise<void> {
     const option = _option ? _option : this.encode ;
     return this._writeFile(file, data, option);
   }

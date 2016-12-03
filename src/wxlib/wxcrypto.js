@@ -36,7 +36,7 @@ type WXParams = {
   msg_signature: string,
   timestamp: string, // should be uint string
   nonce: string, // should be uint string
-  echostr: string,
+  echostr?: string,
 };
 /**
  * 提供基于PKCS7算法的加解密接口

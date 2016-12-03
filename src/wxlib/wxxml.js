@@ -33,11 +33,11 @@ const formatMessage = function (result) {
   }
 };
 
-function parseWxBody(wxBody: string|Buffer): Promise<Object> {
+function wxXml2json(wxXml: string|Buffer): Promise<Object> {
   return new Promise(function(resolve, reject) {
-    const wxXmlStr = (typeof wxBody === 'string')? wxBody:wxBody.toString('utf8');
+    const wxXmlStr = (typeof wxXml === 'string')? wxXml:wxXml.toString('utf8');
     if (!wxXmlStr) { // more safe than only check ''. though we have static check.
-      throw new WXXmlError(`body is wrong|empty.\n${format(wxBody)}`,
+      throw new WXXmlError(`body is wrong|empty.\n${format(wxXml)}`,
       'parseWxBody');
     }
     xml2js.parseString(wxXmlStr, {trim: true}, (err, result) => {
@@ -52,5 +52,5 @@ function parseWxBody(wxBody: string|Buffer): Promise<Object> {
 }
 
 export {
-  parseWxBody,
+  wxXml2json,
 }

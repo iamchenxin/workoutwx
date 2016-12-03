@@ -1,19 +1,14 @@
 // @flow
 //const util = require('util');
-const fs = require('../utils/fs.js').fs;
-import { toTmpDir, format } from '../utils/tools.js';
+import { format } from '../utils/tools.js';
 import type { Context } from 'koa';
-import { WXBizMsgCrypt } from '../wxlib/wxmsgcrypt.js';
-const config = require('../../priv/config.js');
-const { token, encodingAESKey, corpID} = config.wechat;
 import { getRawBody } from '../wxlib/wxbody.js';
+import { toLog, wxCrypt} from './common.js';
 
 async function workout1(ctx: Context, next: () => Promise<void>): Promise<void> {
-  const wc = new WXBizMsgCrypt(token, encodingAESKey, corpID);
   let str = '';
   const wxBody = await getRawBody(ctx.req);
-
-  const plainWx = wc.decryptMsg(ctx.query, wxBody);
+  const plainWx = await wxCrypt.decryptBody(ctx.query, wxBody);
   record(ctx.header,ctx.query,wxBody,plainWx);
 }
 
@@ -31,7 +26,7 @@ plainWx:
 ${format(plainWx)}
 -------------------
 `;
-  fs.writeFile(toTmpDir('wxbody'), str);
+  toLog('wxbody', str);
 }
     /*
     str = `
