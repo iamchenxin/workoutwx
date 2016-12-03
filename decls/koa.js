@@ -276,7 +276,7 @@ declare module 'koa' {
   }
 
   declare type middlewareCallBack =
-    (ctx: Context, next: Promise<Function>) => Promise<void>|void;
+    (ctx: Context, next: () => Promise<void>) => Promise<void>|void;
   declare type ApplicationJSON = {
     'subdomainOffset': mixed,
     'proxy': mixed,
