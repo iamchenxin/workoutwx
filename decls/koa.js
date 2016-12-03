@@ -51,7 +51,7 @@ declare module 'koa' {
     originalUrl: string,
     path: string,
     protocol: string,
-    query: {[key: string]: mixed},
+    query: {[key: string]: string},
     querystring: string,
     search: string,
     secure: boolean, // Shorthand for ctx.protocol == "https" to check if a request was issued via TLS.
@@ -106,6 +106,8 @@ declare module 'koa' {
 
     toJSON: () => RequestJSON,
     inspect: () => RequestInspect,
+
+    [key: string]: mixed, // props added by middlewares.
   };
 
   declare type ResponseJSON = {
@@ -163,6 +165,8 @@ declare module 'koa' {
     // https://github.com/koajs/koa/blob/v2.x/lib/response.js#L519
     toJSON(): ResponseJSON,
     inspect(): ResponseInspect,
+
+    [key: string]: mixed, // props added by middlewares.
   }
 
   declare type ContextJSON = {
@@ -268,7 +272,7 @@ declare module 'koa' {
     ips: $PropertyType<Request, 'ips'>,
     ip: $PropertyType<Request, 'ip'>,
 
-    [key: string]: mixed;
+    [key: string]: mixed, // props added by middlewares.
   }
 
   declare type middlewareCallBack =
