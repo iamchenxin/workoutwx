@@ -1,5 +1,4 @@
 // @flow
-const route = require('koa-route');
 //const util = require('util');
 const fs = require('../utils/fs.js').fs;
 import { toTmpDir, format } from '../utils/tools.js';
