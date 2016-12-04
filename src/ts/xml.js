@@ -24,6 +24,7 @@ const xmlStr2 =  '<?xml version="1.0" encoding="UTF-8"?>' +
    '<sibling>with content!</sibling>' +
 '</root>';
 
+/*
 const rawBody = "<xml><ToUserName><![CDATA[nvshen]]></ToUserName>\
       <FromUserName><![CDATA[diaosi]]></FromUserName>\
       <CreateTime>1362161914</CreateTime>\
@@ -34,15 +35,16 @@ const rawBody = "<xml><ToUserName><![CDATA[nvshen]]></ToUserName>\
       <Label><![CDATA[]]></Label>\
       <MsgId>5850440872586764820</MsgId>\
       </xml>";
+      */
 
 const wxQuery = { msg_signature: '7ea7dc07282f95249274f5ff60583a7f22ca44c7',
   timestamp: '1480757981',
   nonce: '1866900886' };
-const wxXml = `<xml><ToUserName><![CDATA[wx018856cb62d8ad6f]]></ToUserName>\n<Encrypt><![CDATA[y/DXTAKs6XHHzhWZaf67GrHzW9sUXcFKq56s1tHCu1f7uSue/ON2PIkTiOVRkppnUdTrBbyiMStkbAn25Lyv77MpbCph3ri7FDp4KA7oLrsc5kRAA74yfY3EQh2twIyXuhCkGeDQ2Vri1biQU1Ts123GfqiQOb6LwAMqunIv0YUhOXMJ6s5bQ0Eit9EgjrfODzQMSCoNNoIcjeUhKF8IGqO0VPI5yuv0ahFRC5BNChu8uiBniprHR3RxiIT7LpQsmFpZBcQyM/JSjMQ+K/wplzH8rUPYOvnc/ghXx8dhdmldd/4Bd1tcWRmwxvOOh9zHSmMsuIwq6JTyw+kgWZR2KYOGaPG3n1vhLVuIpm+Nuwo/HzxGBG8zWLUEVh7luOQ4W7LdSuPQdasZm4n7YRFCCudxQhnb6XS8v0ZpXBMw3KWwNA3Y2SUq/9HuUx/nsbGap20bnHjLP6VmVhe2xsEaQw==]]></Encrypt>\n<AgentID><![CDATA[1]]></AgentID>\n</xml>`;
+const wxXml = '<xml><ToUserName><![CDATA[wx018856cb62d8ad6f]]></ToUserName>\n<Encrypt><![CDATA[y/DXTAKs6XHHzhWZaf67GrHzW9sUXcFKq56s1tHCu1f7uSue/ON2PIkTiOVRkppnUdTrBbyiMStkbAn25Lyv77MpbCph3ri7FDp4KA7oLrsc5kRAA74yfY3EQh2twIyXuhCkGeDQ2Vri1biQU1Ts123GfqiQOb6LwAMqunIv0YUhOXMJ6s5bQ0Eit9EgjrfODzQMSCoNNoIcjeUhKF8IGqO0VPI5yuv0ahFRC5BNChu8uiBniprHR3RxiIT7LpQsmFpZBcQyM/JSjMQ+K/wplzH8rUPYOvnc/ghXx8dhdmldd/4Bd1tcWRmwxvOOh9zHSmMsuIwq6JTyw+kgWZR2KYOGaPG3n1vhLVuIpm+Nuwo/HzxGBG8zWLUEVh7luOQ4W7LdSuPQdasZm4n7YRFCCudxQhnb6XS8v0ZpXBMw3KWwNA3Y2SUq/9HuUx/nsbGap20bnHjLP6VmVhe2xsEaQw==]]></Encrypt>\n<AgentID><![CDATA[1]]></AgentID>\n</xml>';
 function ts(str) {
   xml2js.parseString(str, (err, result) => {
     console.log(pFormat(result));
-  })
+  });
 }
 
 async function ts2(str) {
@@ -54,10 +56,12 @@ async function ts2(str) {
 
 async function ts3(str) {
   //const buf = Buffer.from(str, 'utf8');
+  console.log(pFormat(str));
+  console.log('--------------------------');
   const rt = await wxXml2json(str);
 
   console.log(pFormat(rt));
-  console.log('--------------------------');
+  console.log('--------------------------plain ===');
   const plain = wxcrypt.decrypt(rt.Encrypt);
   console.log(pFormat(plain));
   console.log('--------------------------');
@@ -70,7 +74,7 @@ async function ts4() {
   console.log(pFormat(msg));
 }
 
-ts4(wxXml).catch(e => {
+ts3(wxXml).catch(e => {
   console.log(e);
 });
 console.log('-----------------------------');

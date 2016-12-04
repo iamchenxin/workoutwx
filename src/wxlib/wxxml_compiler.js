@@ -10,15 +10,15 @@ type WxMsgBase = {
 //  MsgType: 'text'|'image'|'voice'|'video'|'music'|'news',
 };
 
-function baseXmlWrap(baseMsg: WxMsgBase, innerData: string): string {
-  const { ToUserName, FromUserName, CreateTime} = baseMsg;
+function baseXmlWrap(msgBase: WxMsgBase, innerData: string): string {
+  const { ToUserName, FromUserName, CreateTime} = msgBase;
   const wxxml =
-`<xml>
-<ToUserName><![CDATA[${ToUserName}]]></ToUserName>
-<FromUserName><![CDATA[${FromUserName}]]></FromUserName>
-<CreateTime>${CreateTime}</CreateTime>
-${innerData}
-</xml>`;
+    '<xml>' +
+    `<ToUserName><![CDATA[${ToUserName}]]></ToUserName>` +
+    `<FromUserName><![CDATA[${FromUserName}]]></FromUserName>` +
+    `<CreateTime>${CreateTime}</CreateTime>` +
+    `${innerData}` +
+    '</xml>';
   return wxxml;
 }
 
@@ -27,12 +27,12 @@ type WxTextMsg = {
   Content: string,
 };
 
-function textTpl(msg: WxMsgBase & WxTextMsg): string {
+function textTpl(msg: WxTextMsg): string {
   const { Content } = msg;
   const text =
-`<MsgType><![CDATA[text]]></MsgType>
-<Content><![CDATA[${Content}]]></Content>`;
-  return baseXmlWrap(msg, text);
+    '<MsgType><![CDATA[text]]></MsgType>' +
+    `<Content><![CDATA[${Content}]]></Content>`;
+  return text;
 }
 
 type WxImageMsg =  {
@@ -40,14 +40,14 @@ type WxImageMsg =  {
   MediaId: string,
 };
 
-function imageTpl(msg: WxMsgBase & WxImageMsg): string {
+function imageTpl(msg: WxImageMsg): string {
   const {MediaId} = msg;
   const image =
-`<MsgType><![CDATA[image]]></MsgType>
-<Image>
-<MediaId><![CDATA[${MediaId}]]></MediaId>
-</Image>`;
-  return baseXmlWrap(msg, image);
+    '<MsgType><![CDATA[image]]></MsgType>' +
+    '<Image>' +
+    `<MediaId><![CDATA[${MediaId}]]></MediaId>` +
+    '</Image>';
+  return image;
 }
 
 type WxVoiceMsg = {
@@ -55,14 +55,14 @@ type WxVoiceMsg = {
   MediaId: string,
 };
 
-function voiceTpl(msg: WxMsgBase & WxVoiceMsg): string {
+function voiceTpl(msg: WxVoiceMsg): string {
   const {MediaId} = msg;
   const voice =
-`<MsgType><![CDATA[voice]]></MsgType>
-<Voice>
-<MediaId><![CDATA[${MediaId}]]></MediaId>
-</Voice>`;
-  return baseXmlWrap(msg, voice);
+    '<MsgType><![CDATA[voice]]></MsgType>' +
+    '<Voice>' +
+    `<MediaId><![CDATA[${MediaId}]]></MediaId>` +
+    '</Voice>';
+  return voice;
 }
 
 type WxVideoMsg = {
@@ -72,16 +72,16 @@ type WxVideoMsg = {
   MediaId: string,
 };
 
-function videoTpl(msg: WxMsgBase & WxVideoMsg): string  {
+function videoTpl(msg: WxVideoMsg): string  {
   const {Title, Description, MediaId} = msg;
   const video =
-`<MsgType><![CDATA[video]]></MsgType>
-<Video>
-<MediaId><![CDATA[${MediaId}]]></MediaId>
-<Title><![CDATA[${Title}]]></Title>
-<Description><![CDATA[${Description}]]></Description>
-</Video>`;
-  return baseXmlWrap(msg, video);
+    '<MsgType><![CDATA[video]]></MsgType>' +
+    '<Video>' +
+    `<MediaId><![CDATA[${MediaId}]]></MediaId>` +
+    `<Title><![CDATA[${Title}]]></Title>` +
+    `<Description><![CDATA[${Description}]]></Description>` +
+    '</Video>';
+  return video;
 }
 
 type WxMuiscMsg = {
@@ -93,18 +93,18 @@ type WxMuiscMsg = {
   ThumbMediaId: string,
 }
 
-function musicTpl(msg: WxMsgBase & WxMuiscMsg): string {
+function musicTpl(msg: WxMuiscMsg): string {
   const {Title, Description, MusicUrl, HQMusicUrl, ThumbMediaId} = msg;
   const music =
-`<MsgType><![CDATA[music]]></MsgType>
-<Music>
-<Title><![CDATA[${Title}]]></Title>
-<Description><![CDATA[${Description}]]></Description>
-<MusicUrl><![CDATA[${MusicUrl}]]></MusicUrl>
-<HQMusicUrl><![CDATA[${HQMusicUrl}]]></HQMusicUrl>
-<ThumbMediaId><![CDATA[${ThumbMediaId}]]></ThumbMediaId>
-</Music>`;
-  return baseXmlWrap(msg, music);
+    '<MsgType><![CDATA[music]]></MsgType>' +
+    '<Music>' +
+    `<Title><![CDATA[${Title}]]></Title>` +
+    `<Description><![CDATA[${Description}]]></Description>` +
+    `<MusicUrl><![CDATA[${MusicUrl}]]></MusicUrl>` +
+    `<HQMusicUrl><![CDATA[${HQMusicUrl}]]></HQMusicUrl>` +
+    `<ThumbMediaId><![CDATA[${ThumbMediaId}]]></ThumbMediaId>` +
+    '</Music>';
+  return music;
 }
 
 type WxArticleMsg = {
@@ -117,12 +117,12 @@ type WxArticleMsg = {
 function _articleGen(msg: WxArticleMsg): string {
   const {Title, Description, PicUrl, Url} = msg;
   const article =
-`<item>
-<Title><![CDATA[${Title}]]></Title>
-<Description><![CDATA[${Description}]]></Description>
-<PicUrl><![CDATA[${PicUrl}]]></PicUrl>
-<Url><![CDATA[${Url}]]></Url>
-</item>`;
+    '<item>' +
+    `<Title><![CDATA[${Title}]]></Title>` +
+    `<Description><![CDATA[${Description}]]></Description>` +
+    `<PicUrl><![CDATA[${PicUrl}]]></PicUrl>` +
+    `<Url><![CDATA[${Url}]]></Url>` +
+    '</item>';
   return article;
 }
 
@@ -131,46 +131,54 @@ type WxArticlesMsg = {
   Articles: Array<WxArticleMsg>,
 };
 
-function articlesTpl( msg: WxMsgBase & WxArticlesMsg): string {
+function articlesTpl( msg: WxArticlesMsg): string {
   const articles = msg.Articles.map( art => _articleGen(art));
   const articlesXml =
-`<MsgType><![CDATA[news]]></MsgType>
-<ArticleCount>${articles.length}</ArticleCount>
-<Articles>
-${articles.join('')}
-</Articles>`;
-  return baseXmlWrap(msg, articlesXml);
+    '<MsgType><![CDATA[news]]></MsgType>' +
+    `<ArticleCount>${articles.length}</ArticleCount>` +
+    `<Articles>${articles.join('')}</Articles>`;
+  return articlesXml;
 }
 
+/*
 type WxMsg = (WxMsgBase & WxTextMsg) |
 (WxMsgBase & WxImageMsg) |
 (WxMsgBase & WxVoiceMsg) |
 (WxMsgBase & WxVideoMsg) |
 (WxMsgBase & WxMuiscMsg) |
 (WxMsgBase & WxArticlesMsg) ;
+*/
 
-//(WxMsgBase & WxTextMsg) | WxImageMsg | WxVoiceMsg |
-//  WxVideoMsg | WxMuiscMsg | WxArticlesMsg);
+type WxMsg = WxTextMsg | WxImageMsg | WxVoiceMsg |
+  WxVideoMsg | WxMuiscMsg | WxArticlesMsg;
 
-function genWxMsg(_msg: WxMsg): string {
+function genWxMsg(_msg: WxMsg, msgBase: WxMsgBase): string {
   const msg = _msg;
+  let innerData = '';
   switch (msg.MsgType) { // flow static check.
     case 'text':
-      return textTpl(msg);
+      innerData = textTpl(msg);
+      break;
     case 'image':
-      return imageTpl(msg);
+      innerData = imageTpl(msg);
+      break;
     case 'voice':
-      return voiceTpl(msg);
+      innerData = voiceTpl(msg);
+      break;
     case 'video':
-      return videoTpl(msg);
+      innerData = videoTpl(msg);
+      break;
     case 'music':
-      return musicTpl(msg);
+      innerData = musicTpl(msg);
+      break;
     case 'news':
-      return articlesTpl(msg);
+      innerData = articlesTpl(msg);
+      break;
     default:
       throw new WXXmlError(`unknown msg:\n${format(_msg)}\n`,
       'genWxMsg');
   }
+  return baseXmlWrap(msgBase, innerData);
 }
 
 export type {
