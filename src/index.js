@@ -8,6 +8,7 @@ import { toTmpDir, format } from './utils/tools.js';
 import type { Context } from 'koa';
 import { wxverify } from './app/wxverify.js';
 import { workout1 } from './app/workout1.js';
+import { workout2 } from './app/workout2.js';
 import { logDisplay } from './app/log.js';
 const bodyParser = require('koa-bodyparser');
 
@@ -17,7 +18,7 @@ async function hi(ctx: Context, next) {
 
 router
   .get('/work1', wxverify)
-  .post('/work1', workout1)
+  .post('/work1', workout2)
   .get('/log', logDisplay)
   .get('/hi', hi);
 
