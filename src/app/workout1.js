@@ -6,13 +6,13 @@ import { getRawBody } from '../wxlib/wxbody.js';
 import { toLog, wxCrypt} from './common.js';
 
 async function workout1(ctx: Context, next: () => Promise<void>): Promise<void> {
-  let str = '';
+//  let str = '';
   const wxBody = await getRawBody(ctx.req);
   const plainWx = await wxCrypt.decryptBody(ctx.query, wxBody);
-  record(ctx.header,ctx.query,wxBody,plainWx);
+  record(ctx.header, ctx.query, wxBody, plainWx);
 }
 
-function record(header,query,body,plainWx) {
+function record(header, query, body, plainWx) {
   const str = `
 header:
 ${format(header)}
@@ -58,5 +58,5 @@ ${format(ctx.header)}
 }
 */
 export {
-  workout1
-}
+  workout1,
+};

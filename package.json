@@ -6,17 +6,23 @@
   "main": "./lib/index.js",
   "files": [],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run jest",
     "build": "gulp build",
     "start": "node ./lib/index.js",
     "dev": "gulp build && npm run start",
     "schema": "node ./lib/updateSchema.js",
     "bnode": "NODE_ENV=dev babel-node",
     "cr": "NODE_ENV=dev babel-node src/utils/mcrypto.js",
-    "ws": "NODE_ENV=dev babel-node src/ts/wx.js"
+    "ws": "NODE_ENV=dev babel-node src/ts/wx.js",
+    "lint": "eslint ./src",
+    "jest": "NODE_ENV=test jest $@"
+  },
+  "jest": {
+    "verbose": true
   },
   "dependencies": {
     "colors": "^1.1.2",
+    "ejs": "^2.5.3",
     "flow-dynamic": "0.0.14",
     "koa": "^2.0.0-alpha.7",
     "koa-bodyparser": "^3.2.0",
@@ -24,20 +30,21 @@
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
-    "init-scripts": "^0.0.2",
-    "init-preset-node": "^6.8.2",
-    "babel-core": "^6.18.0",
     "babel-cli": "^6.18.0",
-    "gulp": "github:gulpjs/gulp#4.0",
-    "gulp-babel": "^6.1.2",
-    "gulp-rename": "^1.2.2",
-    "gulp-sourcemaps": "^1.6.0",
+    "babel-core": "^6.18.0",
     "babel-eslint": "^6.1.2",
     "eslint": "^3.7.1",
     "eslint-config-fbjs": "^1.1.1",
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-flowtype": "^2.20.0",
     "eslint-plugin-react": "^5.2.2",
-    "flow-bin": "^0.36.0"
+    "flow-bin": "^0.36.0",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "init-preset-node": "^6.8.2",
+    "init-scripts": "^0.0.2",
+    "jest": "^17.0.3"
   }
 }

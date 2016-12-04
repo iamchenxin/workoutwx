@@ -7,6 +7,8 @@ import { format } from '../utils/tools.js';
 import { WXCrypToError } from '../utils/error.js';
 import { getRawBody } from './wxbody.js';
 
+type WXJSON = Object;
+
 class WXBizMsgCrypt {
   prpCrypt: Prpcrypt;
   constructor(token: string, encodingAESKey: string, corpId: string) {
@@ -21,7 +23,7 @@ class WXBizMsgCrypt {
   */
   VerifyEchostr( wxParams: WXParams ): string {
     const {timestamp, nonce} = wxParams;
-    const echostr = wxParams.echostr?wxParams.echostr:'';
+    const echostr = wxParams.echostr ? wxParams.echostr : '';
     const localSignature = this.prpCrypt.getSignature(timestamp, nonce, echostr);
     mustBe(true, localSignature === wxParams.msg_signature,
     new WXCrypToError(`illegal msg from wechat server:
@@ -33,14 +35,14 @@ class WXBizMsgCrypt {
     // It is a legel get, decipher the params and return echostr
     // The echostr from wechat's get is a ciphered data.
     const plainMsg = this.prpCrypt.decrypt(echostr);
-    mustBe(true, plainMsg.id === this.prpCrypt.corpId , new WXCrypToError(
+    mustBe(true, plainMsg.id === this.prpCrypt.corpId, new WXCrypToError(
       `The corpId is not equal to ours.\nplainMsg:\n${format(plainMsg)}`,
       'VerifyEchostr'
     ));
     return plainMsg.message; // the message is deciphered echostr.
   }
 
-  async decryptBody( wxQuery: WXParams, xmlBody: Buffer): Promise<Object> {
+  async decryptBody( wxQuery: WXParams, xmlBody: Buffer): Promise<WXJSON> {
     // the raw body of wechat is a xml
     try {
       const body = await wxXml2json(xmlBody);
@@ -55,7 +57,7 @@ class WXBizMsgCrypt {
       mustBe(true, msgXml.id == msg.ToUserName, 'not the same id!');
       return msg;
     } catch (e) {
-      let errMsg = `Invalid wechat post:\nQuery:\n${format(wxQuery)}\n`+
+      let errMsg = `Invalid wechat post:\nQuery:\n${format(wxQuery)}\n` +
         `Body:\n${xmlBody.toString()}\n`;
       if ( !(e instanceof WXCrypToError) ) {
         errMsg += `\n${format(e)}`;
@@ -63,8 +65,13 @@ class WXBizMsgCrypt {
       throw new WXCrypToError(errMsg, 'decryptBody');
     }
   }
+
+  // build a wechat's xml body from a json style data.
+  async buildBody(wxJson: WXJSON): Promise<Buffer> {
+
+  }
 }
 
 export {
-  WXBizMsgCrypt
-}
+  WXBizMsgCrypt,
+};

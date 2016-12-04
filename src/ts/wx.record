@@ -1,0 +1,27 @@
+
+header:
+{ connection: 'upgrade',
+  'x-forwarded-for': '101.226.103.61',
+  host: 'wx1.midzzz.com',
+  'content-length': '604',
+  'user-agent': 'Mozilla/4.0',
+  accept: '*/*',
+  'content-type': 'text/xml',
+  pragma: 'no-cache' }
+-------------------
+query:
+{ msg_signature: '3d87ed8f747a764ebe70d8bec774a0692e5e1241',
+  timestamp: '1480779740',
+  nonce: '72481102' }
+--------------------
+body:
+'<xml><ToUserName><![CDATA[wx018856cb62d8ad6f]]></ToUserName>\n<Encrypt><![CDATA[hbGTxNp6nnp+3najQYlbXz4Nt6WI0YUJM1OAQRvJLLskkVOhLDhthUgg1MBTGAocn38FgTiPGuzG2ljw/JFreh5TyhgRJ7phDP4a+UXCZmw0+2bateCckCpJAsSU75UjRmn3eWddsmIBwz4/K0dDPoeRklf78QGgIuwQ4lfXqjjPn68FrdGm7HcBG1V5OEmjAkW5XBF7eeAJ4tGV5/TovnE669BwErl0m2jlGRW0sxEQv7RH6bIz+aRaDtZM1+EcR+2M3pvPgUzZFsj8khbQR7S2FuTrHoZGhp1DslOStD81oQ2THHOl5mIl0UnEsp/xxfU5F3lvVZxq/9vAubiPtvQUPn8eCaL6escc8Tkazi/bGm5VnYCNatS2gi6aRpAP0/1heBtQzGGdtvO6StOnL3yhUm+UQWzBtzJL+QiAaRNPIhf9WgvgkunPoo/ZIwGfRO7y5wvwgKu8KShne66LUg==]]></Encrypt>\n<AgentID><![CDATA[1]]></AgentID>\n</xml>'
+plainWx:
+{ ToUserName: 'wx018856cb62d8ad6f',
+  FromUserName: 'mobs001',
+  CreateTime: '1480779740',
+  MsgType: 'event',
+  AgentID: '1',
+  Event: 'click',
+  EventKey: 'dongzuo' }
+-------------------

@@ -2,7 +2,7 @@
 
 const crypto = require('crypto');
 const pro = require('flow-dynamic').pro;
-const {mustNot, mustBe} = pro;
+const { mustBe} = pro;
 declare class _crypto$Decipher extends stream$Duplex {
   final(output_encoding: 'latin1' | 'ascii' | 'utf8'): string,
   final(output_encoding: void): Buffer,
@@ -14,22 +14,22 @@ declare class _crypto$Decipher extends stream$Duplex {
     data: string,
     input_encoding: 'latin1'| 'base64' | 'hex',
     output_encoding: 'latin1' | 'ascii' | 'utf8',
-  ): string;
+  ): string,
   update(
     data: string,
     input_encoding: 'latin1'| 'base64' | 'hex',
     output_encoding: void
-  ): Buffer;
+  ): Buffer,
   update(
     data: Buffer,
     input_encoding: void,
     output_encoding: 'latin1' | 'ascii' | 'utf8',
-  ): string;
+  ): string,
   update(
     data: Buffer,
     input_encoding: void,
     output_encoding: void
-  ): Buffer;
+  ): Buffer,
 }
 
 type WXParams = {
@@ -67,13 +67,13 @@ const PKCS7Encoder = {
    * @param {Buffer} Buffer 解密后的Buffer
   */
   decode(buff: Buffer): Buffer {
-    let pad = buff[buff.length -1];
+    let pad = buff[buff.length - 1];
     if (pad < 1 || pad > 32) {
-        pad = 0;
+      pad = 0;
     }
     return buff.slice(0, buff.length - pad);
-  }
-}
+  },
+};
 
 /**
  * Prpcrypt class
@@ -127,7 +127,7 @@ class Prpcrypt {
 
     const corpIDBuf = Buffer.from(this.corpId, 'utf8');
     const dataBuf = Buffer.concat([
-      randomStr, msgLengthBuf, msgBuf, corpIDBuf
+      randomStr, msgLengthBuf, msgBuf, corpIDBuf,
     ]);
 
     // 对buf进行补位操作
@@ -149,11 +149,11 @@ class Prpcrypt {
     var arr = [this.token, timestamp, nonce, cipheredTxt].sort();
     shasum.update(arr.join(''));
     return shasum.digest('hex');
-  };
+  }
 }
 export type {
-  WXParams
-}
+  WXParams,
+};
 export {
-  Prpcrypt
+  Prpcrypt,
 };

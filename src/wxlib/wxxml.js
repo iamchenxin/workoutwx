@@ -6,7 +6,7 @@ const {mustNot, mustBe} = require('flow-dynamic').pro;
 /*!
  * 将xml2js解析出来的对象转换成直接可访问的对象
  */
-const formatMessage = function (result) {
+const formatMessage = function(result) {
   var message = {};
   if (typeof result === 'object') {
     for (var key in result) {
@@ -22,7 +22,7 @@ const formatMessage = function (result) {
         }
       } else {
         message[key] = [];
-        result[key].forEach(function (item) {
+        result[key].forEach(function(item) {
           message[key].push(formatMessage(item));
         });
       }
@@ -35,7 +35,7 @@ const formatMessage = function (result) {
 
 function wxXml2json(wxXml: string|Buffer): Promise<Object> {
   return new Promise(function(resolve, reject) {
-    const wxXmlStr = (typeof wxXml === 'string')? wxXml:wxXml.toString('utf8');
+    const wxXmlStr = (typeof wxXml === 'string') ? wxXml : wxXml.toString('utf8');
     if (!wxXmlStr) { // more safe than only check ''. though we have static check.
       throw new WXXmlError(`body is wrong|empty.\n${format(wxXml)}`,
       'parseWxBody');
@@ -47,10 +47,12 @@ function wxXml2json(wxXml: string|Buffer): Promise<Object> {
       }
       const wxjson = formatMessage(result.xml);
       resolve(wxjson);
-    })
+    });
   });
 }
 
+
+
 export {
   wxXml2json,
-}
+};
